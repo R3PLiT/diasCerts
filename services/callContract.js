@@ -9,7 +9,7 @@ export const readContractData = async (functionName, ...args) => {
     return result;
   } catch (error) {
     console.error("==== readContractData ====\n", error);
-    throw createError(error.reason ? 400 : 500, error.reason || "Failed read from contract");
+    throw createError(error.reason ? 400 : 500, error.reason || "Internal Server Error");
   }
 };
 
@@ -31,12 +31,12 @@ export const sendContractTransaction = async (functionName, ...args) => {
 
     const receipt = await tx.wait();
     if (receipt.status === 0) {
-      throw createError(500, "Transaction failure");
+      throw createError(500, "transaction Error");
     }
 
     return receipt.transactionHash;
   } catch (error) {
     console.error("==== sendContractTransaction ====\n", error);
-    throw createError(error.reason ? 400 : 500, error.reason || "Failed read from contract");
+    throw createError(error.reason ? 400 : 500, error.reason || "Internal Server Error");
   }
 };

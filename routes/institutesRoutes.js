@@ -1,9 +1,10 @@
 import express from "express";
-import { addInstitutes, institutesList } from "../controllers/institutesControllers.js";
+import { addInstitute, institutesList } from "../controllers/institutesControllers.js";
+import authenticateRole from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 router.get("/", institutesList);
-router.post("/", addInstitutes);
+router.post("/", authenticateRole("admin"), addInstitute);
 
 export default router;

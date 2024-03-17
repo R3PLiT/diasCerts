@@ -140,3 +140,4 @@ replit.nix
 .git
 .config
 .vscode
+.local

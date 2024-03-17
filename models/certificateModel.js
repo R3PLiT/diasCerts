@@ -31,6 +31,7 @@ const certificateSchema = new mongoose.Schema(
     treeRoot: {
       type: String,
       ref: "CertificateTree",
+      index: true,
       validate: {
         validator: async function (value) {
           return await mongoose.model("CertificateTree").exists({ root: value });
@@ -38,7 +39,7 @@ const certificateSchema = new mongoose.Schema(
         message: "CertificateTree with this root does not exist.",
       },
     },
-    transactionHash: { type: String },
+    // transactionHash: { type: String },
     issuerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

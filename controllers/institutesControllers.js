@@ -1,6 +1,6 @@
 import createError from "http-errors";
 import Institute from "../models/instituteModel.js";
-import { isValidObjectId, bulkInsert } from "../services/insertData.js";
+import { handleMongooseError, isValidObjectId } from "../utils/mongooseUtils.js";
 
 export const institutesList = async (req, res, next) => {
   try {
@@ -23,33 +23,40 @@ export const institutesList = async (req, res, next) => {
     const institutes = await Institute.find(query);
 
     if (institutes.length === 0) {
-      return next(createError(404, "No institute found"));
+      // return next(createError(404, "no institute found"));
+      return next(createError(404));
     }
 
     res.json(institutes);
   } catch (error) {
-    if (createError.isHttpError(error)) {
-      next(error);
+    console.error("==== getInstitutes ====\n", error);
+    const handledError = handleMongooseError(error);
+    if (createError.isHttpError(handledError)) {
+      next(handledError);
     } else {
-      console.log("==== getInstitutes ====\n", error);
-      next(createError(500, "get institutes Error"));
+      // next(createError(500, "find institutes Error"));
+      next(createError(500));
     }
   }
 };
 
-export const addInstitutes = async (req, res, next) => {
+export const addInstitute = async (req, res, next) => {
   try {
-    const documents = req.body;
+    const { instituteName, instituteAbbr } = req.body;
 
-    const records = await bulkInsert(Institute, documents);
+    const document = { instituteName, instituteAbbr };
+    await Institute.create(document);
 
-    res.json({ message: "institutes added successfully", records });
+    // res.status(201).json({ message: "institute added successfully" });
+    res.status(201).json({ message: "Created" });
   } catch (error) {
-    if (createError.isHttpError(error)) {
-      next(error);
+    console.error("==== addInstitute ====\n", error);
+    const handledError = handleMongooseError(error);
+    if (createError.isHttpError(handledError)) {
+      next(handledError);
     } else {
-      console.log("==== addInstitutes ====\n", error);
-      next(createError(500, "add institutes Error"));
+      // next(createError(500, "add institute Error"));
+      next(createError(500));
     }
   }
 };

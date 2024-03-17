@@ -30,16 +30,18 @@ const customDate = {
       const paramDate = date === "now" ? dayjs() : dayjs(date);
       return paramDate.format(formatStr);
     } catch (error) {
-      console.log("==== dateFormat ====\n", error);
-      throw createError(500, "format date Error");
+      console.error("==== dateFormat ====\n", error);
+      // throw createError(500, "format date Error");
+      throw createError(500);
     }
   },
   isDateValid: (date, formatStr) => {
     try {
       return dayjs(date, formatStr, true).isValid();
     } catch (error) {
-      console.log("==== isDateValid ====\n", error);
-      throw createError(500, "validate date Error");
+      console.error("==== isDateValid ====\n", error);
+      // throw createError(500, "validate date Error");
+      throw createError(500);
     }
   },
 };

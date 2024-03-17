@@ -53,8 +53,9 @@ const drawCertificate = async (certificateJson) => {
     }
     return canvas;
   } catch (error) {
-    console.log("==== drawCertificate ====\n", error);
-    throw createError(500, "draw image Error");
+    console.error("==== drawCertificate ====\n", error);
+    // throw createError(500, "draw image Error");
+    throw createError(500);
   }
 };
 

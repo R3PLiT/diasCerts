@@ -5,8 +5,9 @@ export const createMerkleTree = (data, dataType) => {
   try {
     return StandardMerkleTree.of(data, dataType);
   } catch (error) {
-    console.log("==== createMerkleTree ====\n", error);
-    throw createError(500, "create tree Error");
+    console.error("==== createMerkleTree ====\n", error);
+    // throw createError(500, "create tree Error");
+    throw createError(500);
   }
 };
 
@@ -14,8 +15,9 @@ export const treeDump = (tree) => {
   try {
     return tree.dump();
   } catch (error) {
-    console.log("==== treeDump ====\n", error);
-    throw createError(500, "dump data Error");
+    console.error("==== treeDump ====\n", error);
+    // throw createError(500, "dump data Error");
+    throw createError(500);
   }
 };
 
@@ -32,7 +34,8 @@ export const getProofAll = (tree) => {
     }
     return allProofs;
   } catch (error) {
-    console.log("==== getProofAll ====\n", error);
-    throw createError(500, "get data Error");
+    console.error("==== getProofAll ====\n", error);
+    // throw createError(500, "get data Error");
+    throw createError(500);
   }
 };

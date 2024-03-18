@@ -3,9 +3,13 @@ import dayjs from "dayjs";
 import "dayjs/locale/th.js";
 import buddhistEra from "dayjs/plugin/buddhistEra.js";
 import customParseFormat from "dayjs/plugin/customParseFormat.js";
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(buddhistEra); // ใช้งาน buddhistEra plugin เพื่อแปลงเป็น พ.ศ.
+dayjs.extend(utc)
+dayjs.extend(timezone);
 
 const customDate = {
   // dateLongTH: (date) => {
@@ -24,10 +28,11 @@ const customDate = {
   //   dayjs.locale("en");
   //   return dayjs(date).format("DD MMM YY");
   // },
-  dateFormat: (date, formatStr, locale) => {
+  dateFormat: (yyyymmdd, formatStr, locale) => {
     try {
       dayjs.locale(locale);
-      const paramDate = date === "now" ? dayjs() : dayjs(date);
+      dayjs.tz.setDefault("Asia/Bangkok");
+      const paramDate = yyyymmdd === "now" ? dayjs.tz() : dayjs.tz(yyyymmdd);
       return paramDate.format(formatStr);
     } catch (error) {
       console.error("==== dateFormat ====\n", error);

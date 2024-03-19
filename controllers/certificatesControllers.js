@@ -135,10 +135,10 @@ export const certificatePNG = async (req, res, next) => {
 
     const certificate = JSON.parse(document.certificateJson);
     if (certificate.certificateDriveImgId) {
-      return res.json({ certificateImage: `https://drive.google.com/file/d/${certificate.certificateDriveImgId}/view` });
-      // return res.redirect(
-      //   `https://drive.google.com/file/d/${certificate.certificateDriveImgId}/view`
-      // );
+      // return res.json({ certificateImage: `https://drive.google.com/file/d/${certificate.certificateDriveImgId}/view` });
+      return res.redirect(
+        `https://drive.google.com/file/d/${certificate.certificateDriveImgId}/view`
+      );
     }
 
     res.setHeader("Content-Type", "image/png");

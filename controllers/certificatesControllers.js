@@ -7,11 +7,12 @@ import { createMerkleTree, treeDump, getProofAll } from "../utils/merkleTree.js"
 import drawCertificate from "../utils/certImage.js";
 import mailCertificates from "../utils/mailCerts.js";
 import { handleMongooseError, insertDocuments } from "../utils/mongooseUtils.js";
+import customDate from "../utils/formatDate.js";
+import { hashDriveImage } from "../utils/hashDriveImage.js";
 import CertificateTree from "../models/cretificateTreeModel.js";
 import Certificate from "../models/certificateModel.js";
 import User from "../models/userModel.js";
 import { readContractData, sendContractTransaction } from "../services/callContract.js";
-import customDate from "../utils/formatDate.js";
 
 export const certificatesList = async (req, res, next) => {
   try {
@@ -132,6 +133,14 @@ export const certificatePNG = async (req, res, next) => {
       return next(createError(500, "certificate data conflict"));
     }
 
+    const certificate = JSON.parse(document.certificateJson);
+    if (certificate.certificateDriveImgId) {
+      // res.json({ certificateDriveImgId: certificate.certificateDriveImgId });
+      return res.redirect(
+        `https://drive.google.com/file/d/${certificate.certificateDriveImgId}/view`
+      );
+    }
+
     res.setHeader("Content-Type", "image/png");
     // res.setHeader("Content-Disposition", `attachment; filename=${certificateUUID}.png`);
     const canvas = await drawCertificate(document.certificateJson);
@@ -238,9 +247,26 @@ export const verifyCertificate = async (req, res, next) => {
         return next(createError(400, "This certificate is valid but EXPIRED"));
       }
 
-      const canvas = await drawCertificate(certificateJson);
+      if (document.certificateDriveImgId) {
+        const imgHash = await hashDriveImage(obj.certificateDriveImgId);
+        if (`0x${imgHash}` === document.certificateDriveImgHash) {
+          outURL = JSON.stringify({
+            message: "This certificate is valid.",
+            certificateData: document,
+            certificateDriveImageId: document.certificateDriveImgId,
+          });
+        } else {
+          return next(createError(500, "This certificate is valid but image verify failure"));
+        }
+      } else {
+        const canvas = await drawCertificate(certificateJson);
 
-      outURL = `{ "message": "This certificate is valid.", "certificateData":${certificateJson}, "certificateImageBase64":"${canvas.toDataURL()}"}`;
+        outURL = JSON.stringify({
+          message: "This certificate is valid.",
+          certificateData: document,
+          certificateImageBase64: canvas.toDataURL(),
+        });
+      }
     } else {
       return next(createError(400, "verify cetificate failure"));
     }
@@ -266,6 +292,10 @@ export const prepareCetificates = async (req, res, next) => {
     const { issueBatchId, certificates } = req.body;
 
     for (let obj of certificates) {
+      if (obj.certificateDriveImgId) {
+        const imgHash = await hashDriveImage(obj.certificateDriveImgId);
+        obj.certificateDriveImgHash = `0x${imgHash}`;
+      }
       const jsonStr = JSON.stringify(obj);
       const hash = hashSHA256(jsonStr);
       obj.certificateJson = jsonStr;

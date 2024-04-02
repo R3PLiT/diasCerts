@@ -80,7 +80,6 @@ export const login = async (req, res, next) => {
 export const emailExists = async (req, res, next) => {
   try {
     const { email } = req.params;
-    console.log(email);
 
     const user = await User.exists({ email });
     if (!user) {

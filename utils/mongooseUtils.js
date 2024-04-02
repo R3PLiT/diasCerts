@@ -13,7 +13,7 @@ export const handleMongooseError = (error) => {
     } else if (error.name === "ValidationError") {
       return createError(422, error.message);
     } else if (error.name === "CastError") {
-      return createError(400, error.message);
+      return createError(400, `${error.path}: ${error.value} [${error.reason}]`);
     } else {
       // return createError(500, "database Error");
       return createError(500);

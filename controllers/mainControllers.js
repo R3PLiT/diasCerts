@@ -9,7 +9,7 @@ import { handleMongooseError } from "../utils/mongooseUtils.js";
 
 export const register = async (req, res, next) => {
   try {
-    const { userName, name, email, password, role, instituteId } = req.body;
+    const { name, email, password, role, instituteId } = req.body;
 
     if (req.jwt?.role !== "admin" && (role === "admin" || role === "issuer")) {
       // return next(createError(403, "Forbidden"));
@@ -17,7 +17,7 @@ export const register = async (req, res, next) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const document = { userName, name, email, password: hashedPassword, role };
+    const document = { name, email, password: hashedPassword, role };
 
     if (role === "issuer" && instituteId) {
       document.instituteId = instituteId;
@@ -41,9 +41,11 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   try {
-    const { userName, password } = req.body;
+    const { email, password } = req.body;
 
-    const user = await User.findOne({ userName }).select("role instituteId +password");
+    const user = await User.findOne({ email }).select(
+      "role instituteId +password",
+    );
     if (!user) {
       return next(createError(400, "invalid credentials"));
     }
@@ -65,6 +67,29 @@ export const login = async (req, res, next) => {
     res.json({ userId: user._id, role: user.role, token });
   } catch (error) {
     console.error("==== login ====\n", error);
+    const handledError = handleMongooseError(error);
+    if (createError.isHttpError(handledError)) {
+      next(handledError);
+    } else {
+      // next(createError(500, "login Error"));
+      next(createError(500));
+    }
+  }
+};
+
+export const emailExists = async (req, res, next) => {
+  try {
+    const { email } = req.params;
+    console.log(email);
+
+    const user = await User.exists({ email });
+    if (!user) {
+      return next(createError(404, "email does not exists"));
+    }
+
+    res.json({ message: `email:${email} exists` });
+  } catch (error) {
+    console.error("==== emailExists ====\n", error);
     const handledError = handleMongooseError(error);
     if (createError.isHttpError(handledError)) {
       next(handledError);

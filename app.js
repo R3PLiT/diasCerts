@@ -41,8 +41,8 @@ app.use("/", mainRoutes);
 
 // Handling undefined routes
 app.use((req, res, next) => {
-  // return next(createError(404, "Page not Found"));
-  return next(createError(404));
+  return next(createError(404, "Page not Found"));
+  // return next(createError(404));
 });
 
 // Error handling middleware

@@ -2,12 +2,17 @@ import "dotenv/config";
 import createError from "http-errors";
 import bcrypt from "bcrypt";
 import User from "../models/userModel.js";
-import { handleMongooseError } from "../utils/mongooseUtils.js";
+import {
+  handleMongooseError,
+  isValidObjectId,
+} from "../utils/mongooseUtils.js";
 
 export const userDetail = async (req, res, next) => {
   try {
     const { userId } = req.jwt;
-    const user = await User.findById(userId).select("-__v -createdAt -updatedAt");
+    const user = await User.findById(userId).select(
+      "-__v -createdAt -updatedAt",
+    );
 
     if (!user) {
       // return next(createError(404, "no user Found"));
@@ -97,13 +102,17 @@ export const deleteUserById = async (req, res, next) => {
 export const updateUserById = async (req, res, next) => {
   try {
     const { _id } = req.params;
-    const { name, oldPassword, newPassword } = req.body;
+    const { name, oldPassword, newPassword, role, instituteId } = req.body;
 
     if (!((oldPassword && newPassword) || (!oldPassword && !newPassword))) {
       return next(
         createError(400, "either old password or new password not exists"),
       );
     }
+
+    // if ((role && role !== "issuer") || isValidObjectId(instituteId)) {
+    //   return next(createError(400, "invalid role"));
+    // }
 
     let hashedPassword;
 

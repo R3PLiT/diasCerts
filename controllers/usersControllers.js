@@ -2,6 +2,7 @@ import "dotenv/config";
 import createError from "http-errors";
 import bcrypt from "bcrypt";
 import User from "../models/userModel.js";
+import Institute from "../models/instituteModel.js";
 import {
   handleMongooseError,
   isValidObjectId,
@@ -110,8 +111,29 @@ export const updateUserById = async (req, res, next) => {
       );
     }
 
-    // if ((role && role !== "issuer") || isValidObjectId(instituteId)) {
-    //   return next(createError(400, "invalid role"));
+    if (
+      role &&
+      !(
+        (role === "issuer" && isValidObjectId(instituteId)) ||
+        (role === "user" && !instituteId)
+      )
+    ) {
+      return next(
+        createError(
+          400,
+          "role must be (user) or (issuer with valid institutei id)",
+        ),
+      );
+    }
+
+    // if (!((role && instituteId) || (!role && !instituteId))) {
+    //   return next(createError(400, "either role or instituteId not exists"));
+    // }
+
+    // if (role && (role !== "issuer" || !isValidObjectId(instituteId))) {
+    //   return next(
+    //     createError(400, "role must be issuer and instituteId must be valid"),
+    //   );
     // }
 
     let hashedPassword;
@@ -133,13 +155,37 @@ export const updateUserById = async (req, res, next) => {
       }
     }
 
-    if (!name && !hashedPassword) {
+    if (role === "issuer") {
+      const institute =
+        await Institute.findById(instituteId).select("instituteAbbr");
+
+      if (!institute) {
+        return next(createError(404, "institute id does not exists"));
+        // return next(createError(404));
+      }
+    }
+
+    if (!name && !hashedPassword && !role && !instituteId) {
       return next(createError(400, "no data to update"));
     }
 
+    // const update = name
+    //   ? { name, ...(hashedPassword ? { password: hashedPassword } : {}) }
+    //   : { ...(hashedPassword ? { password: hashedPassword } : {}) };
+
     const update = name
-      ? { name, ...(hashedPassword ? { password: hashedPassword } : {}) }
-      : { ...(hashedPassword ? { password: hashedPassword } : {}) };
+      ? {
+          name,
+          ...(hashedPassword ? { password: hashedPassword } : {}),
+          ...(role ? { role } : {}),
+          ...(instituteId ? { instituteId } : {}),
+        }
+      : {
+          ...(hashedPassword ? { password: hashedPassword } : {}),
+          ...(role ? { role } : {}),
+          ...(instituteId ? { instituteId } : {}),
+        };
+
     const user = await User.findByIdAndUpdate(_id, update);
 
     if (!user) {

@@ -2,12 +2,18 @@ import "dotenv/config";
 import createError from "http-errors";
 import bcrypt from "bcrypt";
 import User from "../models/userModel.js";
-import { handleMongooseError } from "../utils/mongooseUtils.js";
+import Institute from "../models/instituteModel.js";
+import {
+  handleMongooseError,
+  isValidObjectId,
+} from "../utils/mongooseUtils.js";
 
 export const userDetail = async (req, res, next) => {
   try {
     const { userId } = req.jwt;
-    const user = await User.findById(userId).select("-__v -createdAt -updatedAt");
+    const user = await User.findById(userId).select(
+      "-__v -createdAt -updatedAt",
+    );
 
     if (!user) {
       // return next(createError(404, "no user Found"));
@@ -97,13 +103,38 @@ export const deleteUserById = async (req, res, next) => {
 export const updateUserById = async (req, res, next) => {
   try {
     const { _id } = req.params;
-    const { name, oldPassword, newPassword } = req.body;
+    const { name, oldPassword, newPassword, role, instituteId } = req.body;
 
     if (!((oldPassword && newPassword) || (!oldPassword && !newPassword))) {
       return next(
         createError(400, "either old password or new password not exists"),
       );
     }
+
+    if (
+      role &&
+      !(
+        (role === "issuer" && isValidObjectId(instituteId)) ||
+        (role === "user" && !instituteId)
+      )
+    ) {
+      return next(
+        createError(
+          400,
+          "role must be (user) or (issuer with valid institute id)",
+        ),
+      );
+    }
+
+    // if (!((role && instituteId) || (!role && !instituteId))) {
+    //   return next(createError(400, "either role or instituteId not exists"));
+    // }
+
+    // if (role && (role !== "issuer" || !isValidObjectId(instituteId))) {
+    //   return next(
+    //     createError(400, "role must be issuer and instituteId must be valid"),
+    //   );
+    // }
 
     let hashedPassword;
 
@@ -124,13 +155,43 @@ export const updateUserById = async (req, res, next) => {
       }
     }
 
-    if (!name && !hashedPassword) {
+    if (role === "issuer") {
+      const institute =
+        await Institute.findById(instituteId).select("instituteAbbr");
+
+      if (!institute) {
+        return next(createError(404, "institute id does not exists"));
+        // return next(createError(404));
+      }
+    }
+
+    if (!name && !hashedPassword && !role && !instituteId) {
       return next(createError(400, "no data to update"));
     }
 
+    // const update = name
+    //   ? { name, ...(hashedPassword ? { password: hashedPassword } : {}) }
+    //   : { ...(hashedPassword ? { password: hashedPassword } : {}) };
+
     const update = name
-      ? { name, ...(hashedPassword ? { password: hashedPassword } : {}) }
-      : { ...(hashedPassword ? { password: hashedPassword } : {}) };
+      ? {
+          name,
+          ...(hashedPassword ? { password: hashedPassword } : {}),
+          ...(role ? { role } : {}),
+          // instituteId: role === "issuer" ? instituteId : null,
+          // ...(instituteId ? { instituteId } : {}),
+          ...(role === "user" ? { instituteId: null } :
+             instituteId ? { instituteId } : {}),
+        }
+      : {
+          ...(hashedPassword ? { password: hashedPassword } : {}),
+          ...(role ? { role } : {}),
+          // instituteId: role === "issuer" ? instituteId : null,
+          // ...(instituteId ? { instituteId } : {}),
+        ...(role === "user" ? { instituteId: null } :
+           instituteId ? { instituteId } : {}),
+        };
+
     const user = await User.findByIdAndUpdate(_id, update);
 
     if (!user) {

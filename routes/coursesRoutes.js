@@ -24,8 +24,8 @@ router.delete("/:_id", authenticateRole("issuer"), deleteCourseById);
 router.post("/:_id/graduates", authenticateRole("issuer"), addGraduates);
 router.get("/:_id/graduates", authenticateRole("issuer"), getGraduates);
 
-router.get("/:courseid/graduates/:_id", authenticateRole("issuer"), getGraduateById);
-router.patch("/:courseid/graduates/:_id", authenticateRole("issuer"), updateGraduateById);
-router.delete("/:courseid/graduates/:_id", authenticateRole("issuer"), deleteGraduateById);
+router.get("/:courseId/graduates/:_id", authenticateRole("issuer"), getGraduateById);
+router.patch("/:courseId/graduates/:_id", authenticateRole("issuer"), updateGraduateById);
+router.delete("/:courseId/graduates/:_id", authenticateRole("issuer"), deleteGraduateById);
 
 export default router;

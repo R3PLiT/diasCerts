@@ -121,7 +121,7 @@ export const updateUserById = async (req, res, next) => {
       return next(
         createError(
           400,
-          "role must be (user) or (issuer with valid institutei id)",
+          "role must be (user) or (issuer with valid institute id)",
         ),
       );
     }
@@ -178,12 +178,18 @@ export const updateUserById = async (req, res, next) => {
           name,
           ...(hashedPassword ? { password: hashedPassword } : {}),
           ...(role ? { role } : {}),
-          ...(instituteId ? { instituteId } : {}),
+          // instituteId: role === "issuer" ? instituteId : null,
+          // ...(instituteId ? { instituteId } : {}),
+          ...(role === "user" ? { instituteId: null } :
+             instituteId ? { instituteId } : {}),
         }
       : {
           ...(hashedPassword ? { password: hashedPassword } : {}),
           ...(role ? { role } : {}),
-          ...(instituteId ? { instituteId } : {}),
+          // instituteId: role === "issuer" ? instituteId : null,
+          // ...(instituteId ? { instituteId } : {}),
+        ...(role === "user" ? { instituteId: null } :
+           instituteId ? { instituteId } : {}),
         };
 
     const user = await User.findByIdAndUpdate(_id, update);

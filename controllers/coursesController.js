@@ -163,7 +163,7 @@ export const addGraduates = async (req, res, next) => {
   }
 };
 
-export const getGraduates = async (req, res, next) => {
+export const getAllGraduates = async (req, res, next) => {
   try {
     const { instituteId } = req.jwt;
     const { _id } = req.params;

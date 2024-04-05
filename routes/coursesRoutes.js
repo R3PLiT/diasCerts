@@ -7,7 +7,7 @@ import {
   updateCourseById,
   deleteCourseById,
   addGraduates,
-  getGraduates,
+  getAllGraduates,
   getGraduateById,
   updateGraduateById,
   deleteGraduateById,
@@ -17,12 +17,13 @@ const router = express.Router();
 
 router.get("/", authenticateRole("issuer"), getAllCourses);
 router.post("/", authenticateRole("issuer"), addCourse);
+
 router.get("/:_id", authenticateRole("issuer"), getCourseById);
 router.patch("/:_id", authenticateRole("issuer"), updateCourseById);
 router.delete("/:_id", authenticateRole("issuer"), deleteCourseById);
 
+router.get("/:_id/graduates", authenticateRole("issuer"), getAllGraduates);
 router.post("/:_id/graduates", authenticateRole("issuer"), addGraduates);
-router.get("/:_id/graduates", authenticateRole("issuer"), getGraduates);
 
 router.get("/:courseId/graduates/:_id", authenticateRole("issuer"), getGraduateById);
 router.patch("/:courseId/graduates/:_id", authenticateRole("issuer"), updateGraduateById);

@@ -2,17 +2,12 @@ import "dotenv/config";
 import createError from "http-errors";
 import Course from "../models/courseModel.js";
 import Graduate from "../models/graduateModel.js";
-import {
-  handleMongooseError,
-  insertDocuments,
-} from "../utils/mongooseUtils.js";
+import { handleMongooseError, insertDocuments } from "../utils/mongooseUtils.js";
 
 export const getAllCourses = async (req, res, next) => {
   try {
     const { instituteId } = req.jwt;
-    const courses = await Course.find({ instituteId }).select(
-      "-__v -createdAt -updatedAt",
-    );
+    const courses = await Course.find({ instituteId }).select("-__v -createdAt -updatedAt");
 
     if (courses.length === 0) {
       // return next(createError(404, "no courses found"));
@@ -95,13 +90,13 @@ export const updateCourseById = async (req, res, next) => {
     const result = await Course.findByIdAndUpdate(_id, update).where({
       instituteId,
     });
-    console.log(result);
+
     if (!result) {
       return next(createError(404, "no course Found"));
       // return next(createError(404));
     }
 
-    // res.json(user);
+    // res.json(result);
     res.json({ message: "Updated" });
   } catch (error) {
     console.error("==== updateCourseById ====\n", error);
@@ -173,7 +168,8 @@ export const getGraduates = async (req, res, next) => {
     const { instituteId } = req.jwt;
     const { _id } = req.params;
     const graduates = await Graduate.find({ courseId: _id, instituteId }).select(
-      "-__v -createdAt -updatedAt");
+      "-__v -createdAt -updatedAt"
+    );
 
     if (graduates.length === 0) {
       // return next(createError(404, "no graduates found"));
@@ -188,6 +184,101 @@ export const getGraduates = async (req, res, next) => {
       next(handledError);
     } else {
       // next(createError(500, "find graduates Error"));
+      next(createError(500));
+    }
+  }
+};
+
+export const getGraduateById = async (req, res, next) => {
+  try {
+    const { instituteId } = req.jwt;
+    const { courseId, _id } = req.params;
+
+    const graduate = await Graduate.findById(_id)
+      .select("-__v -createdAt -updatedAt")
+      .where({ courseId, instituteId });
+
+    if (!graduate) {
+      // return next(createError(404, "no graduate Found"));
+      return next(createError(404));
+    }
+
+    res.json(graduate);
+  } catch (error) {
+    console.error("==== getGraduateById ====\n", error);
+    const handledError = handleMongooseError(error);
+    if (createError.isHttpError(handledError)) {
+      next(handledError);
+    } else {
+      // next(createError(500, "find graduate Error"));
+      next(createError(500));
+    }
+  }
+};
+
+export const deleteGraduateById = async (req, res, next) => {
+  try {
+    const { instituteId } = req.jwt;
+    const { courseId, _id } = req.params;
+
+    const graduate = await Graduate.findByIdAndDelete(_id).where({ courseId, instituteId });
+    if (!graduate) {
+      return next(createError(404, "no graduate Found"));
+      // return next(createError(404));
+    }
+
+    res.json({ message: "graduate deleted successfully" });
+  } catch (error) {
+    console.error("==== deleteGraduateById ====\n", error);
+    const handledError = handleMongooseError(error);
+    if (createError.isHttpError(handledError)) {
+      next(handledError);
+    } else {
+      // next(createError(500, "find graduate Error"));
+      next(createError(500));
+    }
+  }
+};
+
+export const updateGraduateById = async (req, res, next) => {
+  try {
+    const { userId, instituteId } = req.jwt;
+    const { courseId, _id } = req.params;
+    const { titleName, firstName, lastName } = req.body;
+
+    if (!titleName && !firstName && !lastName) {
+      return next(createError(400, "no data to update"));
+    }
+
+    const update = titleName
+      ? {
+          titleName,
+          ...(firstName ? { firstName } : {}),
+          ...(lastName ? { lastName } : {}),
+          updatedBy: userId,
+        }
+      : {
+          ...(firstName ? { firstName } : {}),
+          ...(lastName ? { lastName } : {}),
+          updatedBy: userId,
+        };
+
+    const result = await Graduate.findByIdAndUpdate(_id, update).where({ courseId, instituteId });
+
+    if (!result) {
+      return next(createError(404, "no graduate Found"));
+      // return next(createError(404));
+    }
+
+    // res.json(result);
+    res.json({ message: "Updated" });
+  } catch (error) {
+    console.error("==== updateGraduateById ====\n", error);
+    const handledError = handleMongooseError(error);
+    if (createError.isHttpError(handledError)) {
+      next(handledError);
+    } else {
+      // next(createError(500, "find user Error"));
       next(createError(500));
     }
   }

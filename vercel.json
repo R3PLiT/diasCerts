@@ -1,6 +1,6 @@
 { "version": 2,
   "functions": {
-    "/*.js": {
+    "app.js": {
       "runtime": "nodejs@20.11.0"
     }
   },

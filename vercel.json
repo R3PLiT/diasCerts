@@ -1,1 +1,11 @@
-{ "version": 2, "rewrites": [{ "source": "/(.*)", "destination": "/app.js" }] }
+{ "version": 2,
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs@20.11.0"
+    }
+  },
+  "rewrites": [{ 
+    "source": "/(.*)",
+    "destination": "/" 
+  }] 
+}

@@ -1,6 +1,6 @@
-import "dotenv/config";
-import createError from "http-errors";
-import jwt from "jsonwebtoken";
+require("dotenv/config");
+const createError = require("http-errors");
+const jwt = require("jsonwebtoken");
 
 const authenticateRole =
   (...roles) =>
@@ -23,4 +23,4 @@ const authenticateRole =
     });
   };
 
-export default authenticateRole;
+module.exports = authenticateRole;

@@ -1,15 +1,13 @@
-import express from "express";
-import adminsRoutes from "./adminsRoutes.js";
-import institutesRoutes from "./institutesRoutes.js";
-import issuersRoutes from "./issuersRoutes.js";
-import usersRoutes from "./usersRoutes.js";
-import coursesRoutes from "./coursesRoutes.js";
-import certificatesRoutes from "./certificatesRoutes.js";
-import {
-  register,
-  login,
-  emailExists,
-} from "../controllers/mainControllers.js";
+const register = require("../controllers/mainControllers.js").register;
+const login = require("../controllers/mainControllers.js").login;
+const emailExists = require("../controllers/mainControllers.js").emailExists;
+const express = require("express");
+const adminsRoutes = require("./adminsRoutes.js");
+const institutesRoutes = require("./institutesRoutes.js");
+const issuersRoutes = require("./issuersRoutes.js");
+const usersRoutes = require("./usersRoutes.js");
+const coursesRoutes = require("./coursesRoutes.js");
+const certificatesRoutes = require("./certificatesRoutes.js");
 // import authenticateRole from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
@@ -25,4 +23,4 @@ router.use("/users", usersRoutes);
 router.use("/courses", coursesRoutes);
 router.use("/certificates", certificatesRoutes);
 
-export default router;
+module.exports = router;

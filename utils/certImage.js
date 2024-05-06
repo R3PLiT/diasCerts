@@ -1,9 +1,10 @@
-import "dotenv/config";
-import createError from "http-errors";
-import fs from "fs";
-import { registerFont, createCanvas, loadImage } from "canvas";
-import customDate from "./formatDate.js";
-
+require("dotenv/config");
+const createError = require("http-errors");
+const fs = require("fs");
+const registerFont = require("canvas").registerFont;
+const createCanvas = require("canvas").createCanvas;
+const loadImage = require("canvas").loadImage;
+const customDate = require("./formatDate.js");
 // Load fonts for canvas
 // *** windows must use font already install on system ***
 registerFont("templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
@@ -59,4 +60,4 @@ const drawCertificate = async (certificateJson) => {
   }
 };
 
-export default drawCertificate;
+module.exports = drawCertificate;

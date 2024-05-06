@@ -1,12 +1,12 @@
-import "dotenv/config";
-import fs from "fs";
-import { ethers } from "ethers";
+require("dotenv/config");
+const fs = require("fs");
+const ethers = require("ethers").ethers;
 
 let provider;
 let signer;
 let contract;
 
-export const connectEthereum = async () => {
+exports.connectEthereum = async () => {
   try {
     if (!provider) {
       const rpcURL = process.env.SEPOLIA_ALCHEMY;
@@ -32,21 +32,21 @@ export const connectEthereum = async () => {
   }
 };
 
-export const getProvider = async () => {
+exports.getProvider = async () => {
   if (!provider) {
     await connectEthereum();
   }
   return provider;
 };
 
-export const getSigner = async () => {
+exports.getSigner = async () => {
   if (!signer) {
     await connectEthereum();
   }
   return signer;
 };
 
-export const getContract = async () => {
+exports.getContract = async () => {
   if (!contract) {
     await connectEthereum();
   }

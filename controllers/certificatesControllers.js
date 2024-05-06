@@ -1,20 +1,24 @@
-import fs from "fs";
-import mongoose from "mongoose";
-import createError from "http-errors";
-import { randomUUID } from "crypto";
-import hashSHA256 from "../utils/hashData.js";
-import { createMerkleTree, treeDump, getProofAll } from "../utils/merkleTree.js";
-import drawCertificate from "../utils/certImage.js";
-import mailCertificates from "../utils/mailCerts.js";
-import { handleMongooseError, insertDocuments } from "../utils/mongooseUtils.js";
-import customDate from "../utils/formatDate.js";
-import { hashDriveImage } from "../utils/hashDriveImage.js";
-import CertificateTree from "../models/cretificateTreeModel.js";
-import Certificate from "../models/certificateModel.js";
-import User from "../models/userModel.js";
-import { readContractData, sendContractTransaction } from "../services/callContract.js";
+const fs = require("fs");
+const mongoose = require("mongoose");
+const createError = require("http-errors");
+const randomUUID = require("crypto").randomUUID;
+const hashSHA256 = require("../utils/hashData.js");
+const createMerkleTree = require("../utils/merkleTree.js").createMerkleTree;
+const treeDump = require("../utils/merkleTree.js").treeDump;
+const getProofAll = require("../utils/merkleTree.js").getProofAll;
+const drawCertificate = require("../utils/certImage.js");
+const mailCertificates = require("../utils/mailCerts.js");
+const handleMongooseError = require("../utils/mongooseUtils.js").handleMongooseError;
+const insertDocuments = require("../utils/mongooseUtils.js").insertDocuments;
+const customDate = require("../utils/formatDate.js");
+const hashDriveImage = require("../utils/hashDriveImage.js").hashDriveImage;
+const CertificateTree = require("../models/cretificateTreeModel.js");
+const Certificate = require("../models/certificateModel.js");
+const User = require("../models/userModel.js");
+const readContractData = require("../services/callContract.js").readContractData;
+const sendContractTransaction = require("../services/callContract.js").sendContractTransaction;
 
-export const certificatesList = async (req, res, next) => {
+exports.certificatesList = async (req, res, next) => {
   try {
     const { userId, role } = req.jwt;
 
@@ -75,7 +79,7 @@ export const certificatesList = async (req, res, next) => {
   }
 };
 
-export const certificateJson = async (req, res, next) => {
+exports.certificateJson = async (req, res, next) => {
   try {
     const { certificateUUID } = req.params;
 
@@ -115,7 +119,7 @@ export const certificateJson = async (req, res, next) => {
   }
 };
 
-export const certificatePNG = async (req, res, next) => {
+exports.certificatePNG = async (req, res, next) => {
   try {
     const { certificateUUID } = req.params;
 
@@ -161,7 +165,7 @@ export const certificatePNG = async (req, res, next) => {
   }
 };
 
-export const revokeCertificate = async (req, res, next) => {
+exports.revokeCertificate = async (req, res, next) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -207,7 +211,7 @@ export const revokeCertificate = async (req, res, next) => {
   }
 };
 
-export const verifyCertificate = async (req, res, next) => {
+exports.verifyCertificate = async (req, res, next) => {
   let certificateFile;
   try {
     certificateFile = req.file.path;
@@ -287,7 +291,7 @@ export const verifyCertificate = async (req, res, next) => {
   }
 };
 
-export const prepareCetificates = async (req, res, next) => {
+exports.prepareCetificates = async (req, res, next) => {
   try {
     const { issueBatchId, certificates } = req.body;
 
@@ -331,7 +335,7 @@ export const prepareCetificates = async (req, res, next) => {
   }
 };
 
-export const issueCertificates = async (req, res, next) => {
+exports.issueCertificates = async (req, res, next) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
@@ -397,7 +401,7 @@ export const issueCertificates = async (req, res, next) => {
   }
 };
 
-export const sendCertificates = async (req, res, next) => {
+exports.sendCertificates = async (req, res, next) => {
   try {
     const { root } = req.body;
     const { userId } = req.jwt;

@@ -1,5 +1,5 @@
-import createError from "http-errors";
-import crypto from "crypto";
+const createError = require("http-errors");
+const crypto = require("crypto");
 
 const hashSHA256 = (input) => {
   try {
@@ -11,4 +11,4 @@ const hashSHA256 = (input) => {
   }
 };
 
-export default hashSHA256;
+module.exports = hashSHA256;

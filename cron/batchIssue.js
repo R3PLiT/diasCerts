@@ -1,12 +1,14 @@
-import cron from "node-cron";
-import mongoose from "mongoose";
-import connectToDatabase from "../services/connectMongo.js";
-import { createMerkleTree, treeDump, getProofAll } from "../utils/merkleTree.js";
-import mailCertificates from "../utils/mailCerts.js";
-import customDate from "../utils/formatDate.js";
-import CertificateTree from "../models/cretificateTreeModel.js";
-import Certificate from "../models/certificateModel.js";
-import { sendContractTransaction } from "../services/callContract.js";
+const cron = require("node-cron");
+const mongoose = require("mongoose");
+const connectToDatabase = require("../services/connectMongo.js");
+const createMerkleTree = require("../utils/merkleTree.js").createMerkleTree;
+const treeDump = require("../utils/merkleTree.js").treeDump;
+const getProofAll = require("../utils/merkleTree.js").getProofAll;
+const mailCertificates = require("../utils/mailCerts.js");
+const customDate = require("../utils/formatDate.js");
+const CertificateTree = require("../models/cretificateTreeModel.js");
+const Certificate = require("../models/certificateModel.js");
+const sendContractTransaction = require("../services/callContract.js").sendContractTransaction;
 
 const issueCertificates = async () => {
   const session = await mongoose.startSession();

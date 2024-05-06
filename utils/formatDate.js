@@ -1,14 +1,14 @@
-import createError from "http-errors";
-import dayjs from "dayjs";
-import "dayjs/locale/th.js";
-import buddhistEra from "dayjs/plugin/buddhistEra.js";
-import customParseFormat from "dayjs/plugin/customParseFormat.js";
-import utc from 'dayjs/plugin/utc.js';
-import timezone from 'dayjs/plugin/timezone.js';
+const createError = require("http-errors");
+const dayjs = require("dayjs");
+require("dayjs/locale/th.js");
+const buddhistEra = require("dayjs/plugin/buddhistEra.js");
+const customParseFormat = require("dayjs/plugin/customParseFormat.js");
+const utc = require("dayjs/plugin/utc.js");
+const timezone = require("dayjs/plugin/timezone.js");
 
 dayjs.extend(customParseFormat);
 dayjs.extend(buddhistEra); // ใช้งาน buddhistEra plugin เพื่อแปลงเป็น พ.ศ.
-dayjs.extend(utc)
+dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const customDate = {
@@ -51,4 +51,4 @@ const customDate = {
   },
 };
 
-export default customDate;
+module.exports = customDate;

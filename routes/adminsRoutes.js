@@ -1,9 +1,9 @@
-import express from "express";
-import authenticateRole from "../middlewares/authMiddleware.js";
-import { userDetail } from "../controllers/usersControllers.js";
+const express = require("express");
+const authenticateRole = require("../middlewares/authMiddleware.js");
+const userDetail = require("../controllers/usersControllers.js").userDetail;
 
 const router = express.Router();
 
 router.get("/me", authenticateRole("admin"), userDetail);
 
-export default router;
+module.exports = router;

@@ -1,14 +1,14 @@
-import "dotenv/config";
-import createError from "http-errors";
-import crypto from "crypto";
-import { google } from "googleapis";
+require("dotenv/config");
+const createError = require("http-errors");
+const crypto = require("crypto");
+const google = require("googleapis").google;
 
 const drive = google.drive({
   version: "v3",
   auth: process.env.GOOGLE_AUTHKEY,
 });
 
-export const hashDriveImage = async (fileId) => {
+exports.hashDriveImage = async (fileId) => {
   try {
     const response = await drive.files.get(
       {

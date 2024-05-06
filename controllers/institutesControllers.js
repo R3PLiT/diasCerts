@@ -1,8 +1,9 @@
-import createError from "http-errors";
-import Institute from "../models/instituteModel.js";
-import { handleMongooseError, isValidObjectId } from "../utils/mongooseUtils.js";
+const createError = require("http-errors");
+const Institute = require("../models/instituteModel.js");
+const handleMongooseError = require("../utils/mongooseUtils.js").handleMongooseError;
+const isValidObjectId = require("../utils/mongooseUtils.js").isValidObjectId;
 
-export const institutesList = async (req, res, next) => {
+exports.institutesList = async (req, res, next) => {
   try {
     const { _id, instituteName, instituteAbbr } = req.query;
 
@@ -40,7 +41,7 @@ export const institutesList = async (req, res, next) => {
   }
 };
 
-export const addInstitute = async (req, res, next) => {
+exports.addInstitute = async (req, res, next) => {
   try {
     const { instituteName, instituteAbbr } = req.body;
 

@@ -10,14 +10,8 @@ const errorHandler = (err, req, res, next) => {
       res.status(err.status).json({ message: err.message });
     }
   } else {
-    console.error(
-      `status ${err.status || 500} error: ${
-        err.message || "Internal Server Error"
-      }\n`,
-    );
-    res
-      .status(err.status || 500)
-      .json({ error: err.message || "Internal Server Error" });
+    console.error(`status ${err.status || 500} error: ${err.message || "Internal Server Error"}\n`);
+    res.status(err.status || 500).json({ error: err.message || "Internal Server Error" });
   }
 };
 
@@ -33,4 +27,4 @@ const errorHandler = (err, req, res, next) => {
 //   }
 // };
 
-export default errorHandler;
+module.exports = errorHandler;

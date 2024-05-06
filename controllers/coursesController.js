@@ -1,10 +1,11 @@
-import "dotenv/config";
-import createError from "http-errors";
-import Course from "../models/courseModel.js";
-import Graduate from "../models/graduateModel.js";
-import { handleMongooseError, insertDocuments } from "../utils/mongooseUtils.js";
+require("dotenv/config");
+const createError = require("http-errors");
+const Course = require("../models/courseModel.js");
+const Graduate = require("../models/graduateModel.js");
+const handleMongooseError = require("../utils/mongooseUtils.js").handleMongooseError;
+const insertDocuments = require("../utils/mongooseUtils.js").insertDocuments;
 
-export const getAllCourses = async (req, res, next) => {
+exports.getAllCourses = async (req, res, next) => {
   try {
     const { instituteId } = req.jwt;
     const courses = await Course.find({ instituteId }).select("-__v -createdAt -updatedAt");
@@ -27,7 +28,7 @@ export const getAllCourses = async (req, res, next) => {
   }
 };
 
-export const addCourse = async (req, res, next) => {
+exports.addCourse = async (req, res, next) => {
   try {
     const { instituteId, userId } = req.jwt;
     const { course } = req.body;
@@ -49,7 +50,7 @@ export const addCourse = async (req, res, next) => {
   }
 };
 
-export const getCourseById = async (req, res, next) => {
+exports.getCourseById = async (req, res, next) => {
   try {
     const { instituteId } = req.jwt;
     const { _id } = req.params;
@@ -75,7 +76,7 @@ export const getCourseById = async (req, res, next) => {
   }
 };
 
-export const updateCourseById = async (req, res, next) => {
+exports.updateCourseById = async (req, res, next) => {
   try {
     const { userId, instituteId } = req.jwt;
     const { _id } = req.params;
@@ -110,7 +111,7 @@ export const updateCourseById = async (req, res, next) => {
   }
 };
 
-export const deleteCourseById = async (req, res, next) => {
+exports.deleteCourseById = async (req, res, next) => {
   try {
     const { instituteId } = req.jwt;
     const { _id } = req.params;
@@ -135,7 +136,7 @@ export const deleteCourseById = async (req, res, next) => {
   }
 };
 
-export const addGraduates = async (req, res, next) => {
+exports.addGraduates = async (req, res, next) => {
   try {
     const { userId, instituteId } = req.jwt;
     const { _id } = req.params;
@@ -163,7 +164,7 @@ export const addGraduates = async (req, res, next) => {
   }
 };
 
-export const getGraduates = async (req, res, next) => {
+exports.getGraduates = async (req, res, next) => {
   try {
     const { instituteId } = req.jwt;
     const { _id } = req.params;
@@ -189,7 +190,7 @@ export const getGraduates = async (req, res, next) => {
   }
 };
 
-export const getGraduateById = async (req, res, next) => {
+exports.getGraduateById = async (req, res, next) => {
   try {
     const { instituteId } = req.jwt;
     const { courseId, _id } = req.params;
@@ -216,7 +217,7 @@ export const getGraduateById = async (req, res, next) => {
   }
 };
 
-export const deleteGraduateById = async (req, res, next) => {
+exports.deleteGraduateById = async (req, res, next) => {
   try {
     const { instituteId } = req.jwt;
     const { courseId, _id } = req.params;
@@ -240,7 +241,7 @@ export const deleteGraduateById = async (req, res, next) => {
   }
 };
 
-export const updateGraduateById = async (req, res, next) => {
+exports.updateGraduateById = async (req, res, next) => {
   try {
     const { userId, instituteId } = req.jwt;
     const { courseId, _id } = req.params;

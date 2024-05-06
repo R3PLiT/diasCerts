@@ -1,19 +1,15 @@
-import "dotenv/config";
-import createError from "http-errors";
-import bcrypt from "bcrypt";
-import User from "../models/userModel.js";
-import Institute from "../models/instituteModel.js";
-import {
-  handleMongooseError,
-  isValidObjectId,
-} from "../utils/mongooseUtils.js";
+const handleMongooseError = require("../utils/mongooseUtils.js").handleMongooseError;
+const isValidObjectId = require("../utils/mongooseUtils.js").isValidObjectId;
+require("dotenv/config");
+const createError = require("http-errors");
+const bcrypt = require("bcrypt");
+const User = require("../models/userModel.js");
+const Institute = require("../models/instituteModel.js");
 
-export const userDetail = async (req, res, next) => {
+exports.userDetail = async (req, res, next) => {
   try {
     const { userId } = req.jwt;
-    const user = await User.findById(userId).select(
-      "-__v -createdAt -updatedAt",
-    );
+    const user = await User.findById(userId).select("-__v -createdAt -updatedAt");
 
     if (!user) {
       // return next(createError(404, "no user Found"));
@@ -33,7 +29,7 @@ export const userDetail = async (req, res, next) => {
   }
 };
 
-export const getAllUser = async (req, res, next) => {
+exports.getAllUser = async (req, res, next) => {
   try {
     const users = await User.find().select("-__v -createdAt -updatedAt");
 
@@ -55,7 +51,7 @@ export const getAllUser = async (req, res, next) => {
   }
 };
 
-export const getUserById = async (req, res, next) => {
+exports.getUserById = async (req, res, next) => {
   try {
     const { _id } = req.params;
     const user = await User.findById(_id).select("-__v -createdAt -updatedAt");
@@ -78,7 +74,7 @@ export const getUserById = async (req, res, next) => {
   }
 };
 
-export const deleteUserById = async (req, res, next) => {
+exports.deleteUserById = async (req, res, next) => {
   try {
     const { _id } = req.params;
     const user = await User.findByIdAndDelete(_id);
@@ -100,30 +96,20 @@ export const deleteUserById = async (req, res, next) => {
   }
 };
 
-export const updateUserById = async (req, res, next) => {
+exports.updateUserById = async (req, res, next) => {
   try {
     const { _id } = req.params;
     const { name, oldPassword, newPassword, role, instituteId } = req.body;
 
     if (!((oldPassword && newPassword) || (!oldPassword && !newPassword))) {
-      return next(
-        createError(400, "either old password or new password not exists"),
-      );
+      return next(createError(400, "either old password or new password not exists"));
     }
 
     if (
       role &&
-      !(
-        (role === "issuer" && isValidObjectId(instituteId)) ||
-        (role === "user" && !instituteId)
-      )
+      !((role === "issuer" && isValidObjectId(instituteId)) || (role === "user" && !instituteId))
     ) {
-      return next(
-        createError(
-          400,
-          "role must be (user) or (issuer with valid institute id)",
-        ),
-      );
+      return next(createError(400, "role must be (user) or (issuer with valid institute id)"));
     }
 
     // if (!((role && instituteId) || (!role && !instituteId))) {
@@ -156,8 +142,7 @@ export const updateUserById = async (req, res, next) => {
     }
 
     if (role === "issuer") {
-      const institute =
-        await Institute.findById(instituteId).select("instituteAbbr");
+      const institute = await Institute.findById(instituteId).select("instituteAbbr");
 
       if (!institute) {
         return next(createError(404, "institute id does not exists"));
@@ -180,16 +165,14 @@ export const updateUserById = async (req, res, next) => {
           ...(role ? { role } : {}),
           // instituteId: role === "issuer" ? instituteId : null,
           // ...(instituteId ? { instituteId } : {}),
-          ...(role === "user" ? { instituteId: null } :
-             instituteId ? { instituteId } : {}),
+          ...(role === "user" ? { instituteId: null } : instituteId ? { instituteId } : {}),
         }
       : {
           ...(hashedPassword ? { password: hashedPassword } : {}),
           ...(role ? { role } : {}),
           // instituteId: role === "issuer" ? instituteId : null,
           // ...(instituteId ? { instituteId } : {}),
-        ...(role === "user" ? { instituteId: null } :
-           instituteId ? { instituteId } : {}),
+          ...(role === "user" ? { instituteId: null } : instituteId ? { instituteId } : {}),
         };
 
     const user = await User.findByIdAndUpdate(_id, update);

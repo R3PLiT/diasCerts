@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const certificateTreeSchema = new mongoose.Schema(
   {
@@ -13,4 +13,4 @@ const certificateTreeSchema = new mongoose.Schema(
 
 const CertificateTree = mongoose.model("CertificateTree", certificateTreeSchema);
 
-export default CertificateTree;
+module.exports = CertificateTree;

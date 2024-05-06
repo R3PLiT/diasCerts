@@ -1,7 +1,7 @@
-import createError from "http-errors";
-import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
+const createError = require("http-errors");
+const StandardMerkleTree = require("@openzeppelin/merkle-tree").StandardMerkleTree;
 
-export const createMerkleTree = (data, dataType) => {
+exports.createMerkleTree = (data, dataType) => {
   try {
     return StandardMerkleTree.of(data, dataType);
   } catch (error) {
@@ -11,7 +11,7 @@ export const createMerkleTree = (data, dataType) => {
   }
 };
 
-export const treeDump = (tree) => {
+exports.treeDump = (tree) => {
   try {
     return tree.dump();
   } catch (error) {
@@ -21,7 +21,7 @@ export const treeDump = (tree) => {
   }
 };
 
-export const getProofAll = (tree) => {
+exports.getProofAll = (tree) => {
   try {
     let allProofs = {}; // object key-value pair
     const root = tree.root;

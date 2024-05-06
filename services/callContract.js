@@ -1,7 +1,8 @@
-import createError from "http-errors";
-import { getSigner, getContract } from "./connectEthers.js";
+const createError = require("http-errors");
+const getSigner = require("./connectEthers.js").getSigner;
+const getContract = require("./connectEthers.js").getContract;
 
-export const readContractData = async (functionName, ...args) => {
+exports.readContractData = async (functionName, ...args) => {
   try {
     const contract = await getContract();
     const result = await contract.callStatic[functionName](...args);
@@ -13,7 +14,7 @@ export const readContractData = async (functionName, ...args) => {
   }
 };
 
-export const sendContractTransaction = async (functionName, ...args) => {
+exports.sendContractTransaction = async (functionName, ...args) => {
   try {
     const contract = await getContract();
     const signer = await getSigner();

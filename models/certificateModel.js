@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const isValidObjectId = mongoose.Types.ObjectId.isValid;
 
@@ -61,4 +61,4 @@ const certificateSchema = new mongoose.Schema(
 
 const Certificate = mongoose.model("Certificate", certificateSchema);
 
-export default Certificate;
+module.exports = Certificate;

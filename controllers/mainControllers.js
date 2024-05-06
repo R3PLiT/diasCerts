@@ -1,13 +1,13 @@
-import "dotenv/config";
-import createError from "http-errors";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import User from "../models/userModel.js";
-import { handleMongooseError } from "../utils/mongooseUtils.js";
+require("dotenv/config");
+const createError = require("http-errors");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../models/userModel.js");
+const handleMongooseError = require("../utils/mongooseUtils.js").handleMongooseError;
 // import mongoose from "mongoose";
 // import { bulkInsert } from "../services/insertData.js";
 
-export const register = async (req, res, next) => {
+exports.register = async (req, res, next) => {
   try {
     const { name, email, password, role, instituteId } = req.body;
 
@@ -39,13 +39,11 @@ export const register = async (req, res, next) => {
   }
 };
 
-export const login = async (req, res, next) => {
+exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email }).select(
-      "role instituteId +password",
-    );
+    const user = await User.findOne({ email }).select("role instituteId +password");
     if (!user) {
       return next(createError(400, "invalid credentials"));
     }
@@ -77,7 +75,7 @@ export const login = async (req, res, next) => {
   }
 };
 
-export const emailExists = async (req, res, next) => {
+exports.emailExists = async (req, res, next) => {
   try {
     const { email } = req.params;
 

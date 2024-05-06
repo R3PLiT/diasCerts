@@ -1,9 +1,9 @@
-import createError from "http-errors";
-import mongoose from "mongoose";
+const createError = require("http-errors");
+const mongoose = require("mongoose");
 
-export const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+exports.isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
-export const handleMongooseError = (error) => {
+exports.handleMongooseError = (error) => {
   // if (error instanceof mongoose.Error || error.name === "MongoServerError") {
   if (error instanceof mongoose.Error || error.name.includes("Mongo")) {
     if (error.code === 11000 || error.code === 11001) {
@@ -65,7 +65,7 @@ export const handleMongooseError = (error) => {
 //   }
 // };
 
-export const insertDocuments = async (Model, documents) => {
+exports.insertDocuments = async (Model, documents) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {

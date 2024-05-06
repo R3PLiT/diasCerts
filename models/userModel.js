@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const isValidObjectId = mongoose.Types.ObjectId.isValid;
 
@@ -44,16 +44,15 @@ const userSchema = new mongoose.Schema(
           }
           return await mongoose.model("Institute").exists({ _id: value });
         },
-        message:
-          "Required only for issuer and must exist in the 'Institute' collection.",
+        message: "Required only for issuer and must exist in the 'Institute' collection.",
       },
     },
     active: { type: Boolean, default: true },
   },
 
-  { timestamps: true },
+  { timestamps: true }
 );
 
 const User = mongoose.model("User", userSchema);
 
-export default User;
+module.exports = User;

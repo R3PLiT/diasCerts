@@ -1,14 +1,14 @@
-import "dotenv/config";
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import compression from "compression";
-// import multer from "multer";
-import createError from "http-errors";
-import connectToDatabase from "./services/connectMongo.js";
-import { connectEthereum } from "./services/connectEthers.js";
-import mainRoutes from "./routes/mainRoutes.js";
-import errorHandler from "./middlewares/errorMiddleware.js";
+require("dotenv/config");
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const compression = require("compression");
+const multer = require("multer");
+const createError = require("http-errors");
+const connectToDatabase = require("./services/connectMongo.js");
+const connectEthereum = require("./services/connectEthers.js").connectEthereum;
+const mainRoutes = require("./routes/mainRoutes.js");
+const errorHandler = require("./middlewares/errorMiddleware.js");
 
 const app = express();
 const port = process.env.PORT || 3030;
@@ -22,19 +22,27 @@ app.use(express.json());
 // app.use(multer({ dest: "uploads/" }).any());
 
 // Connect to MongoDB Atlas
-try {
-  await connectToDatabase();
-} catch (error) {
-  console.error("Database connection error:", error);
-  process.exit(1);
-}
+const connectDB = async () => {
+  try {
+    await connectToDatabase();
+  } catch (error) {
+    console.error("Database connection error:", error);
+    process.exit(1);
+  }
+};
+
+connectDB();
 
 // Connect to Ethereum Sepolia
-try {
-  await connectEthereum();
-} catch (error) {
-  console.error("Initializing Ethereum error:", error);
-}
+const connectETH = async () => {
+  try {
+    await connectEthereum();
+  } catch (error) {
+    console.error("Initializing Ethereum error:", error);
+  }
+};
+
+connectETH();
 
 // Routes
 app.use("/", mainRoutes);

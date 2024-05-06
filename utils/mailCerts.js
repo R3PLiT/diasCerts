@@ -1,6 +1,6 @@
-import "dotenv/config";
-import createError from "http-errors";
-import nodemailer from "nodemailer";
+require("dotenv/config");
+const createError = require("http-errors");
+const nodemailer = require("nodemailer");
 
 const mailCertificates = async (details) => {
   try {
@@ -54,4 +54,4 @@ const mailCertificates = async (details) => {
   }
 };
 
-export default mailCertificates;
+module.exports = mailCertificates;

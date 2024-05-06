@@ -7,8 +7,8 @@ const loadImage = require("canvas").loadImage;
 const customDate = require("./formatDate.js");
 // Load fonts for canvas
 // *** windows must use font already install on system ***
-registerFont("templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
-registerFont("templates/fonts/THSarabun.ttf", { family: "Normal" });
+// registerFont("templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
+// registerFont("templates/fonts/THSarabun.ttf", { family: "Normal" });
 
 const drawCertificate = async (certificateJson) => {
   try {

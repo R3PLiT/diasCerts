@@ -12,17 +12,9 @@
       "dest": "app.js"
     }
   ],
-    "functions":[ 
-    {
-      "utils/certImage.js": {
-        "includeFiles": "templates/**"
-      }
-    },
-    {
-        "services/connectEthers.js.js": {
-          "includeFiles": "contracts/**"
-        } 
+  "functions": {
+    "utils/**": {
+      "includeFiles": "templates/**"
     }
-    
-  ]
+  }
 }

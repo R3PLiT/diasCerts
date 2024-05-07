@@ -12,11 +12,9 @@
       "dest": "app.js"
     }
   ],
-  {
-    "functions": {
-      "utils/certImages.js": {
-        "includeFiles": "template/**"
-      }
+  "functions": {
+    "utils/certImages.js": {
+      "includeFiles": "templates/**"
     }
   }
 }

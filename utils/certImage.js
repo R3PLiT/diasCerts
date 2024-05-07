@@ -7,13 +7,20 @@ const loadImage = require("canvas").loadImage;
 const customDate = require("./formatDate.js");
 // Load fonts for canvas
 // *** windows must use font already install on system ***
-registerFont(process.cwd()+"/templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
-registerFont(process.cwd()+"/templates/fonts/THSarabun.ttf", { family: "Normal" });
+// registerFont(process.cwd()+"/templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
+// registerFont(process.cwd()+"/templates/fonts/THSarabun.ttf", { family: "Normal" });
+
+registerFont(process.cwd() + "/utils/THSarabun Bold.ttf", { family: "Bold" });
+registerFont(process.cwd() + "/utils/fonts/THSarabun.ttf", {
+  family: "Normal",
+});
 
 const drawCertificate = async (certificateJson) => {
   try {
     const certificate = JSON.parse(certificateJson);
-    const layout = JSON.parse(fs.readFileSync(`templates/${certificate.layoutId}.json`));
+    const layout = JSON.parse(
+      fs.readFileSync(`templates/${certificate.layoutId}.json`),
+    );
 
     const imageTemplate = await loadImage(`templates/${layout.template}`);
     const canvas = createCanvas(imageTemplate.width, imageTemplate.height);
@@ -27,7 +34,7 @@ const drawCertificate = async (certificateJson) => {
         layout.images[i].x,
         layout.images[i].y,
         layout.images[i].width,
-        layout.images[i].height
+        layout.images[i].height,
       );
     }
 
@@ -46,7 +53,7 @@ const drawCertificate = async (certificateJson) => {
         textString = customDate.dateFormat(
           textString,
           layout.texts[j].dateformat.format,
-          layout.texts[j].dateformat.locale
+          layout.texts[j].dateformat.locale,
         );
       }
 

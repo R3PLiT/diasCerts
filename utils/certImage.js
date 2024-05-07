@@ -1,6 +1,7 @@
 require("dotenv/config");
 const createError = require("http-errors");
 const fs = require("fs");
+const path = require("path");
 const registerFont = require("canvas").registerFont;
 const createCanvas = require("canvas").createCanvas;
 const loadImage = require("canvas").loadImage;
@@ -12,8 +13,14 @@ const customDate = require("./formatDate.js");
 console.log ("============");
 console.log (process.cwd());
 
-registerFont(process.cwd() + "/templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
-registerFont(process.cwd() + "/templates/fonts/THSarabun.ttf", { family: "Normal" });
+
+// import path from 'path'
+// registerFont(path.resolve('./fonts/Anton-Regular.ttf'), { family: 'Anton' })`
+registerFont(path.resolve("../templates/fonts/THSarabun Bold.ttf"), { family: "Bold" });
+registerFont(path.resolve("../templates/fonts/THSarabun.ttf", { family: "Normal" });
+
+// registerFont(process.cwd() + "/templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
+// registerFont(process.cwd() + "/templates/fonts/THSarabun.ttf", { family: "Normal" });
 
 // registerFont(process.cwd() + "/utils/THSarabunBold.ttf", { family: "Bold" });
 // registerFont(process.cwd() + "/utils/fonts/THSarabun.ttf", {

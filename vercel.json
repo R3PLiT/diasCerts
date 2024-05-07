@@ -11,5 +11,12 @@
       "src": "/(.*)",
       "dest": "app.js"
     }
-  ]
+  ],
+  {
+    "functions": {
+      "utils/certImages.js": {
+        "includeFiles": "template/**"
+      }
+    }
+  }
 }

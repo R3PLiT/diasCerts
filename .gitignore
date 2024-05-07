@@ -141,3 +141,4 @@ replit.nix
 .config
 .vscode
 .local
+.vercel

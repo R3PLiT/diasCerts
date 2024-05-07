@@ -17,7 +17,7 @@ console.log (process.cwd());
 // import path from 'path'
 // registerFont(path.resolve('./fonts/Anton-Regular.ttf'), { family: 'Anton' })`
 registerFont(path.resolve("../templates/fonts/THSarabun Bold.ttf"), { family: "Bold" });
-registerFont(path.resolve("../templates/fonts/THSarabun.ttf", { family: "Normal" });
+registerFont(path.resolve("../templates/fonts/THSarabun.ttf"), { family: "Normal" });
 
 // registerFont(process.cwd() + "/templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
 // registerFont(process.cwd() + "/templates/fonts/THSarabun.ttf", { family: "Normal" });

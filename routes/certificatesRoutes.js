@@ -11,7 +11,7 @@ const multer = require("multer");
 const authenticateRole = require("../middlewares/authMiddleware.js");
 
 // const upload = multer({ dest: "uploads/" });
-const upload = multer({ dest: "tmp/" });
+// const upload = multer({ dest: "tmp/" });
 const router = express.Router();
 
 router.get("/", authenticateRole("issuer"), certificatesList);
@@ -21,7 +21,7 @@ router.get("/:certificateUUID/image", certificatePNG);
 
 router.delete("/:certificateUUID/revoke", authenticateRole("issuer"), revokeCertificate);
 
-router.post("/verify", upload.single("certificateFile"), verifyCertificate);
+// router.post("/verify", upload.single("certificateFile"), verifyCertificate);
 
 router.post("/prepare", authenticateRole("issuer"), prepareCetificates);
 router.post("/issue", authenticateRole("issuer"), issueCertificates);

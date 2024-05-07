@@ -211,7 +211,7 @@ exports.revokeCertificate = async (req, res, next) => {
   }
 };
 
-exports.verifyCertificate = async (req, res, next) => {
+// exports.verifyCertificate = async (req, res, next) => {
   let certificateFile;
   try {
     certificateFile = req.file.path;

@@ -23,9 +23,8 @@ const connectEthereum = async () => {
     }
 
     if (!contract) {
-      // const contractABI = JSON.parse(fs.readFileSync(process.env.CONTRACT_FILE));
-      console.log(path.resolve(process.env.CONTRACT_FILE))
-      const contractABI = JSON.parse(fs.readFileSync(path.resolve(process.env.CONTRACT_FILE)));
+      const contractABI = JSON.parse(fs.readFileSync(process.env.CONTRACT_FILE));
+      // const contractABI = JSON.parse(fs.readFileSync(path.resolve(process.env.CONTRACT_FILE)));
       const contractAddress = process.env.CONTRACT_ADDR;
       contract = new ethers.Contract(contractAddress, contractABI, signer);
       console.log("contract created");

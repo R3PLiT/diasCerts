@@ -214,9 +214,10 @@ exports.revokeCertificate = async (req, res, next) => {
 exports.verifyCertificate = async (req, res, next) => {
   let certificateFile;
   try {
-    certificateFile = req.file.path;
-    const certificate = JSON.parse(fs.readFileSync(certificateFile));
-    fs.unlinkSync(certificateFile);
+    // certificateFile = req.file.path;
+    // const certificate = JSON.parse(fs.readFileSync(certificateFile));
+    // fs.unlinkSync(certificateFile);
+    const certificate  = JSON.parse(String(req.file.buffer));
 
     const certificateJson = JSON.stringify(certificate.certificateJson);
 
@@ -277,9 +278,9 @@ exports.verifyCertificate = async (req, res, next) => {
 
     res.type("json").send(outURL);
   } catch (error) {
-    if (req.file && fs.existsSync(certificateFile)) {
-      fs.unlinkSync(certificateFile);
-    }
+    // if (req.file && fs.existsSync(certificateFile)) {
+    //   fs.unlinkSync(certificateFile);
+    // }
     console.error("==== verifyCertificate ====\n", error);
     const handledError = handleMongooseError(error);
     if (createError.isHttpError(handledError)) {

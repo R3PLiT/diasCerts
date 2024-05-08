@@ -11,7 +11,7 @@ const multer = require("multer");
 const authenticateRole = require("../middlewares/authMiddleware.js");
 
 // const upload = multer({ dest: "uploads/" });
-const upload = multer({ dest: "tmp/" });
+const upload = multer({ storage: multer.memoryStorage() })
 const router = express.Router();
 
 router.get("/", authenticateRole("issuer"), certificatesList);

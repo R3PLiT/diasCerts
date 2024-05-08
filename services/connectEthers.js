@@ -35,21 +35,21 @@ const connectEthereum = async () => {
   }
 };
 
-exports.getProvider = async () => {
+const getProvider = async () => {
   if (!provider) {
     await connectEthereum();
   }
   return provider;
 };
 
-exports.getSigner = async () => {
+const getSigner = async () => {
   if (!signer) {
     await connectEthereum();
   }
   return signer;
 };
 
-exports.getContract = async () => {
+const getContract = async () => {
   if (!contract) {
     await connectEthereum();
   }
@@ -57,5 +57,8 @@ exports.getContract = async () => {
 };
 
 module.exports = {
-  connectEthereum
+  connectEthereum,
+  getProvider,
+  getSigner,
+  getContract
 }

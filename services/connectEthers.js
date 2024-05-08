@@ -1,12 +1,14 @@
 require("dotenv/config");
 const fs = require("fs");
+const path = require("path");
 const ethers = require("ethers").ethers;
 
 let provider;
 let signer;
 let contract;
 
-exports.connectEthereum = async () => {
+const connectEthereum = async () => {
+// exports.connectEthereum = async () => {
   try {
     if (!provider) {
       const rpcURL = process.env.SEPOLIA_ALCHEMY;
@@ -22,6 +24,7 @@ exports.connectEthereum = async () => {
 
     if (!contract) {
       // const contractABI = JSON.parse(fs.readFileSync(process.env.CONTRACT_FILE));
+      console.log(path.resolve(process.env.CONTRACT_FILE))
       const contractABI = JSON.parse(fs.readFileSync(path.resolve(process.env.CONTRACT_FILE)));
       const contractAddress = process.env.CONTRACT_ADDR;
       contract = new ethers.Contract(contractAddress, contractABI, signer);
@@ -53,3 +56,7 @@ exports.getContract = async () => {
   }
   return contract;
 };
+
+module.exports = {
+  connectEthereum
+}

@@ -10,8 +10,8 @@ const customDate = require("./formatDate.js");
 // *** windows must use font already install on system ***
 // registerFont("templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
 // registerFont("templates/fonts/THSarabun.ttf", { family: "Normal" });
-console.log ("============");
-console.log (process.cwd());
+// console.log ("============");
+// console.log (process.cwd());
 
 
 // import path from 'path'

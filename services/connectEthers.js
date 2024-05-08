@@ -1,6 +1,6 @@
 require("dotenv/config");
 const fs = require("fs");
-const path = require("path");
+// const path = require("path");
 const ethers = require("ethers").ethers;
 
 let provider;

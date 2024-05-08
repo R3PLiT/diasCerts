@@ -211,85 +211,85 @@ exports.revokeCertificate = async (req, res, next) => {
   }
 };
 
-// exports.verifyCertificate = async (req, res, next) => {
-//   let certificateFile;
-//   try {
-//     certificateFile = req.file.path;
-//     const certificate = JSON.parse(fs.readFileSync(certificateFile));
-//     fs.unlinkSync(certificateFile);
+exports.verifyCertificate = async (req, res, next) => {
+  let certificateFile;
+  try {
+    certificateFile = req.file.path;
+    const certificate = JSON.parse(fs.readFileSync(certificateFile));
+    fs.unlinkSync(certificateFile);
 
-//     const certificateJson = JSON.stringify(certificate.certificateJson);
+    const certificateJson = JSON.stringify(certificate.certificateJson);
 
-//     if (
-//       `0x${hashSHA256(certificateJson)}` !== certificate.certificateHash ||
-//       certificate.certificateHash !== certificate.signature.leaf
-//     ) {
-//       return next(createError(409, "Certificate data conflict"));
-//     }
+    if (
+      `0x${hashSHA256(certificateJson)}` !== certificate.certificateHash ||
+      certificate.certificateHash !== certificate.signature.leaf
+    ) {
+      return next(createError(409, "Certificate data conflict"));
+    }
 
-//     const document = JSON.parse(certificateJson);
+    const document = JSON.parse(certificateJson);
 
-//     // if (
-//     //   document.expireDate &&
-//     //   document.expireDate < customDate.dateFormat("now", "YYYYMMDD", "en")
-//     // ) {
-//     //   return next(createError(409, "certificate expired"));
-//     // }
+    // if (
+    //   document.expireDate &&
+    //   document.expireDate < customDate.dateFormat("now", "YYYYMMDD", "en")
+    // ) {
+    //   return next(createError(409, "certificate expired"));
+    // }
 
-//     const root = certificate.signature.root;
-//     const proofs = certificate.signature.proofs;
-//     const leaf = certificate.signature.leaf;
+    const root = certificate.signature.root;
+    const proofs = certificate.signature.proofs;
+    const leaf = certificate.signature.leaf;
 
-//     const result = await readContractData("verifyLeaf", root, proofs, leaf);
+    const result = await readContractData("verifyLeaf", root, proofs, leaf);
 
-//     let outURL = "";
-//     if (result) {
-//       if (
-//         document.expireDate &&
-//         document.expireDate < customDate.dateFormat("now", "YYYYMMDD", "en")
-//       ) {
-//         return next(createError(400, "This certificate is valid but EXPIRED"));
-//       }
+    let outURL = "";
+    if (result) {
+      if (
+        document.expireDate &&
+        document.expireDate < customDate.dateFormat("now", "YYYYMMDD", "en")
+      ) {
+        return next(createError(400, "This certificate is valid but EXPIRED"));
+      }
 
-//       if (document.certificateDriveImgId) {
-//         const imgHash = await hashDriveImage(obj.certificateDriveImgId);
-//         if (`0x${imgHash}` === document.certificateDriveImgHash) {
-//           outURL = JSON.stringify({
-//             message: "This certificate is valid.",
-//             certificateData: document,
-//             certificateDriveImageId: document.certificateDriveImgId,
-//           });
-//         } else {
-//           return next(createError(500, "This certificate is valid but image verify failure"));
-//         }
-//       } else {
-//         const canvas = await drawCertificate(certificateJson);
+      if (document.certificateDriveImgId) {
+        const imgHash = await hashDriveImage(obj.certificateDriveImgId);
+        if (`0x${imgHash}` === document.certificateDriveImgHash) {
+          outURL = JSON.stringify({
+            message: "This certificate is valid.",
+            certificateData: document,
+            certificateDriveImageId: document.certificateDriveImgId,
+          });
+        } else {
+          return next(createError(500, "This certificate is valid but image verify failure"));
+        }
+      } else {
+        const canvas = await drawCertificate(certificateJson);
 
-//         outURL = JSON.stringify({
-//           message: "This certificate is valid.",
-//           certificateData: document,
-//           certificateImageBase64: canvas.toDataURL(),
-//         });
-//       }
-//     } else {
-//       return next(createError(400, "verify cetificate failure"));
-//     }
+        outURL = JSON.stringify({
+          message: "This certificate is valid.",
+          certificateData: document,
+          certificateImageBase64: canvas.toDataURL(),
+        });
+      }
+    } else {
+      return next(createError(400, "verify cetificate failure"));
+    }
 
-//     res.type("json").send(outURL);
-//   } catch (error) {
-//     if (req.file && fs.existsSync(certificateFile)) {
-//       fs.unlinkSync(certificateFile);
-//     }
-//     console.error("==== verifyCertificate ====\n", error);
-//     const handledError = handleMongooseError(error);
-//     if (createError.isHttpError(handledError)) {
-//       next(handledError);
-//     } else {
-//       // next(createError(500, "verify certificate Error"));
-//       next(createError(500));
-//     }
-//   }
-// };
+    res.type("json").send(outURL);
+  } catch (error) {
+    if (req.file && fs.existsSync(certificateFile)) {
+      fs.unlinkSync(certificateFile);
+    }
+    console.error("==== verifyCertificate ====\n", error);
+    const handledError = handleMongooseError(error);
+    if (createError.isHttpError(handledError)) {
+      next(handledError);
+    } else {
+      // next(createError(500, "verify certificate Error"));
+      next(createError(500));
+    }
+  }
+};
 
 exports.prepareCetificates = async (req, res, next) => {
   try {

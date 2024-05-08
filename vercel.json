@@ -4,7 +4,7 @@
     {
       "src": "app.js",
       "use": "@vercel/node",
-      "config": { "includeFiles": ["contracts/**","templates/**","uploads/**"] }
+      "config": { "includeFiles": ["contracts/**","templates/**","tmp/**"] }
     }
   ],
   "routes": [

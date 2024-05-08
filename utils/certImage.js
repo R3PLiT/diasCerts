@@ -19,8 +19,8 @@ const customDate = require("./formatDate.js");
 // registerFont(path.resolve("./utils/THSarabun Bold.ttf"), { family: "Bold" });
 // registerFont(path.resolve("./utils/THSarabun.ttf"), { family: "Normal" });
 
-// registerFont(process.cwd() + "/templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
-// registerFont(process.cwd() + "/templates/fonts/THSarabun.ttf", { family: "Normal" });
+registerFont("templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
+registerFont("templates/fonts/THSarabun.ttf", { family: "Normal" });
 
 // registerFont(process.cwd() + "/utils/THSarabunBold.ttf", { family: "Bold" });
 // registerFont(process.cwd() + "/utils/fonts/THSarabun.ttf", {

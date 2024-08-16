@@ -1,11 +1,8 @@
-{ "version": 2,
+{
   "functions": {
-    "app.js": {
-      "runtime": "nodejs@20.11.0"
+    "api/**/*": {
+      "maxDuration": 60
     }
   },
-  "rewrites": [{ 
-    "source": "/(.*)",
-    "destination": "/" 
-  }] 
+  "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
 }

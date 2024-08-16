@@ -6,21 +6,25 @@ import customDate from "./formatDate.js";
 
 // Load fonts for canvas
 // *** windows must use font already install on system ***
-registerFont("templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
-registerFont("templates/fonts/THSarabun.ttf", { family: "Normal" });
+// registerFont("templates/fonts/THSarabun Bold.ttf", { family: "Bold" });
+// registerFont("templates/fonts/THSarabun.ttf", { family: "Normal" });
+registerFont("api/includes/THSarabun Bold.ttf", { family: "Bold" });
+registerFont("api/includes/THSarabun.ttf", { family: "Normal" });
 
 const drawCertificate = async (certificateJson) => {
   try {
     const certificate = JSON.parse(certificateJson);
-    const layout = JSON.parse(fs.readFileSync(`templates/${certificate.layoutId}.json`));
+    const layout = JSON.parse(
+      fs.readFileSync(`api/includes/${certificate.layoutId}.json`)
+    );
 
-    const imageTemplate = await loadImage(`templates/${layout.template}`);
+    const imageTemplate = await loadImage(`api/includes/${layout.template}`);
     const canvas = createCanvas(imageTemplate.width, imageTemplate.height);
     const ctx = canvas.getContext("2d");
     ctx.drawImage(imageTemplate, 0, 0);
 
     for (let i = 0; i < layout.images.length; i++) {
-      const img = await loadImage(`templates/${layout.images[i].image}`);
+      const img = await loadImage(`api/includes/${layout.images[i].image}`);
       ctx.drawImage(
         img,
         layout.images[i].x,

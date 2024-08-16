@@ -12,7 +12,12 @@ import {
   verifyCertificate,
 } from "../controllers/certificatesControllers.js";
 
-const upload = multer({ dest: "uploads/" });
+// const upload = multer({ dest: "uploads/" });
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 100 * 1024 },
+});
+
 const router = express.Router();
 
 router.get("/", authenticateRole("issuer"), certificatesList);
@@ -20,7 +25,11 @@ router.get("/", authenticateRole("issuer"), certificatesList);
 router.get("/:certificateUUID", certificateJson);
 router.get("/:certificateUUID/image", certificatePNG);
 
-router.delete("/:certificateUUID/revoke", authenticateRole("issuer"), revokeCertificate);
+router.delete(
+  "/:certificateUUID/revoke",
+  authenticateRole("issuer"),
+  revokeCertificate
+);
 
 router.post("/verify", upload.single("certificateFile"), verifyCertificate);
 
